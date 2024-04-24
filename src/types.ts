@@ -47,3 +47,7 @@ export type NullableObject<T> = {
 }
 
 export type GetRuleRecordFromConfig<T> = T extends { rules?: infer R } ? R : Linter.RulesRecord
+
+export type PartialRecord<K extends keyof any, T> = {
+  [P in K]?: T;
+}

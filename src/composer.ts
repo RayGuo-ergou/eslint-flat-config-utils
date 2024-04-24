@@ -1,5 +1,5 @@
 import type { Linter } from 'eslint'
-import type { Arrayable, Awaitable, DefaultConfigNamesMap, FilterType, GetRuleRecordFromConfig, NullableObject, StringLiteralUnion } from './types'
+import type { Arrayable, Awaitable, DefaultConfigNamesMap, FilterType, GetRuleRecordFromConfig, NullableObject, PartialRecord, StringLiteralUnion } from './types'
 import { renamePluginsInConfigs } from './rename'
 import { mergeConfigs } from './merge'
 
@@ -183,10 +183,12 @@ export class FlatConfigComposer<
    * Same as calling `override` multiple times.
    */
   public overrides(
-    overrides: Record<StringLiteralUnion<ConfigNames, string | number>, T | ((config: T) => Awaitable<T>)>,
+    overrides: PartialRecord<StringLiteralUnion<ConfigNames, string | number>, T | ((config: T) => Awaitable<T>)>,
   ): this {
-    for (const [name, config] of Object.entries(overrides))
-      this.override(name, config)
+    for (const [name, config] of Object.entries(overrides)) {
+      if (config)
+        this.override(name, config)
+    }
     return this
   }
 
